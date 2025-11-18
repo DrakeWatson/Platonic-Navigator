@@ -1,0 +1,23 @@
+{
+	"test_plan": {
+		"metadata": {
+			"name": "example_testplan_name",
+			"module_under_test": "path/to/module_or_script_being_tested.py",
+			"last_updated": "YYYY-MM-DD"
+		},
+		"test_cases": [
+			{"name": "example_tests",
+			"test_case_type": "unit | integration | full",
+			"test_case_subtype": "input_validation:unit | expected_failure:unit,integration,full | functional_validation:unit,integration,full",
+			"purpose": "Detailed description of this test case and its tests purpose.",
+			"script_functions_tested": "script_file.function_in_script",
+			"tests": [
+				{"test_name": "example_test_0",
+				"functions_used": "script_file.function_in_script",
+				"description_of_steps": "Brief description of the steps involved for this test.",
+				"expected_outcome": "Brief description of the expected outcome we will check to know this test is passing.",
+				"validation_method": ["expected_return_value_and_order", "expected_file_content", "expected_exception"]}
+			]
+		}]
+	}
+}

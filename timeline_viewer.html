@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Timeline Viewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a polished look */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .collapsible-content {
+            display: none;
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+        }
+        .collapsible-header.open .arrow {
+            transform: rotate(90deg);
+        }
+        .arrow {
+            transition: transform 0.2s ease-in-out;
+        }
+        /* Custom scrollbar for a better look in dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-4">
+        <!-- Header Section -->
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-cyan-400">Test Timeline Viewer</h1>
+            <p class="text-gray-400 mt-1">Upload your test report and timeline files to visualize the execution flow.</p>
+        </header>
+
+        <!-- File Upload Section -->
+        <div class="bg-gray-800 rounded-lg p-6 shadow-lg mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="reportFile" class="block mb-2 text-sm font-medium text-gray-300">1. Upload Test Report (.json)</label>
+                    <input type="file" id="reportFile" accept=".json" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-cyan-500 file:text-white hover:file:bg-cyan-600 cursor-pointer">
+                </div>
+                <div>
+                    <label for="timelineFile" class="block mb-2 text-sm font-medium text-gray-300">2. Upload Timeline Events (.json)</label>
+                    <input type="file" id="timelineFile" accept=".json" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-cyan-500 file:text-white hover:file:bg-cyan-600 cursor-pointer">
+                </div>
+            </div>
+             <div id="loading" class="text-center text-gray-400 mt-4" style="display: none;">Loading and processing files...</div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 text-white" style="display: none;">
+            <div class="bg-green-600/80 p-4 rounded-lg shadow-md text-center">
+                <p class="text-sm font-medium opacity-80">Passed</p>
+                <p id="passedCount" class="text-3xl font-bold">0</p>
+            </div>
+            <div class="bg-red-600/80 p-4 rounded-lg shadow-md text-center">
+                <p class="text-sm font-medium opacity-80">Failed</p>
+                <p id="failedCount" class="text-3xl font-bold">0</p>
+            </div>
+            <div class="bg-gray-600/80 p-4 rounded-lg shadow-md text-center">
+                <p class="text-sm font-medium opacity-80">Not Ran</p>
+                <p id="notRanCount" class="text-3xl font-bold">0</p>
+            </div>
+            <div class="bg-blue-600/80 p-4 rounded-lg shadow-md text-center">
+                <p class="text-sm font-medium opacity-80">Total Tests</p>
+                <p id="totalCount" class="text-3xl font-bold">0</p>
+            </div>
+        </div>
+
+        <!-- Timeline Container -->
+        <div id="timelineContainer" class="space-y-3">
+            <!-- Timeline will be rendered here -->
+        </div>
+
+    </div>
+
+    <script>
+        // Global variables to store parsed data
+        let reportData = null;
+        let timelineData = null;
+
+        const reportFileInput = document.getElementById('reportFile');
+        const timelineFileInput = document.getElementById('timelineFile');
+        const loadingIndicator = document.getElementById('loading');
+
+        // Event listeners for file inputs
+        reportFileInput.addEventListener('change', (event) => handleFileUpload(event, 'report'));
+        timelineFileInput.addEventListener('change', (event) => handleFileUpload(event, 'timeline'));
+
+        /**
+         * Handles the file upload and parsing.
+         * @param {Event} event - The file input change event.
+         * @param {string} type - The type of file ('report' or 'timeline').
+         */
+        function handleFileUpload(event, type) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            loadingIndicator.style.display = 'block';
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const parsedData = JSON.parse(e.target.result);
+                    if (type === 'report') {
+                        reportData = parsedData;
+                    } else {
+                        timelineData = parsedData;
+                    }
+                    // Once both files are loaded, process and render
+                    if (reportData && timelineData) {
+                        renderAll();
+                    }
+                } catch (error) {
+                    // Use a more subtle way to show errors
+                    console.error('JSON Parse Error:', error);
+                    alert(`Error parsing ${file.name}. Please ensure it's a valid JSON file.`);
+                } finally {
+                    if (reportData && timelineData) {
+                       loadingIndicator.style.display = 'none';
+                    }
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        /**
+         * Main function to process data and render the UI.
+         */
+        function renderAll() {
+            renderDashboard(reportData);
+            const groupedData = processTimelineData(timelineData);
+            renderTimeline(groupedData, reportData);
+        }
+
+        /**
+         * Renders the summary dashboard.
+         * @param {object} data - The parsed test report data.
+         */
+        function renderDashboard(data) {
+            const summary = data.summary;
+            document.getElementById('passedCount').textContent = summary.passed;
+            document.getElementById('failedCount').textContent = summary.failed;
+            document.getElementById('notRanCount').textContent = summary.not_ran;
+            document.getElementById('totalCount').textContent = summary.total_tests;
+            document.getElementById('dashboard').style.display = 'grid';
+        }
+
+        /**
+         * Groups timeline events by test case and test name, merging exception events.
+         * @param {object} data - The parsed timeline data.
+         * @returns {object} - A nested object with events grouped by test case and test.
+         */
+        function processTimelineData(data) {
+            const grouped = {};
+            const eventKeys = Object.keys(data).slice(1); // Skip __init__
+            
+            eventKeys.forEach(key => {
+                const event = data[key];
+                if (!event.test_details) return;
+                const [testCaseName, testName] = event.test_details.split('.');
+                
+                if (!grouped[testCaseName]) grouped[testCaseName] = {};
+                if (!grouped[testCaseName][testName]) grouped[testCaseName][testName] = [];
+
+                event.original_key = key;
+                grouped[testCaseName][testName].push(event);
+            });
+
+            // Process events to merge exceptions and sort
+            for (const testCase in grouped) {
+                for (const test in grouped[testCase]) {
+                    const events = grouped[testCase][test];
+                    const processedEvents = [];
+                    for (let i = 0; i < events.length; i++) {
+                        const currentEvent = events[i];
+                        if (currentEvent.original_key.includes('exception_at_line')) {
+                            const nextEvent = events[i + 1];
+                            if (nextEvent && nextEvent.entry_context.startsWith('Catching a')) {
+                                currentEvent.isException = true;
+                                processedEvents.push(currentEvent);
+                                i++; // Skip the next 'Catching' event
+                                continue;
+                            }
+                        }
+                        processedEvents.push(currentEvent);
+                    }
+
+                    // Sort events chronologically
+                    processedEvents.sort((a, b) => {
+                        const timeA = parseFloat(a.original_key.split('.').slice(0, 2).join('.'));
+                        const timeB = parseFloat(b.original_key.split('.').slice(0, 2).join('.'));
+                        return timeA - timeB;
+                    });
+                     grouped[testCase][test] = processedEvents;
+                }
+            }
+            return grouped;
+        }
+
+        /**
+         * Renders the entire timeline structure into the DOM.
+         * @param {object} groupedData - The processed and grouped timeline data.
+         * @param {object} fullReportData - The parsed test report data.
+         */
+        function renderTimeline(groupedData, fullReportData) {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '';
+
+            const testStatusMap = new Map();
+            fullReportData.details.forEach(tc => tc.tests.forEach(t => testStatusMap.set(`${tc.name}.${t.name}`, { status: t.status, reason: t.reason })));
+
+            fullReportData.details.forEach(testCaseDetail => {
+                const testCaseName = testCaseDetail.name;
+                const testsInCase = groupedData[testCaseName];
+                if (!testsInCase) return;
+
+                const caseHasFailure = testCaseDetail.tests.some(t => t.status === 'FAIL');
+                const caseStatus = caseHasFailure ? 'FAIL' : 'PASS';
+                
+                const testCaseElement = createCollapsibleElement(testCaseName, `Test Case &middot; ${testCaseDetail.type} &middot; ${testCaseDetail.subtype}`, caseStatus, 0);
+                const testCaseContent = testCaseElement.querySelector('.collapsible-content');
+
+                testCaseDetail.tests.forEach(testDetail => {
+                    const testName = testDetail.name;
+                    const events = testsInCase[testName];
+                    const testInfo = testStatusMap.get(`${testCaseName}.${testName}`) || { status: 'NOT_RAN', reason: 'Not in report.' };
+
+                    if (!events) return;
+
+                    const testElement = createCollapsibleElement(testName, 'Test', testInfo.status, 1, testInfo.reason);
+                    const testContent = testElement.querySelector('.collapsible-content');
+                    const eventsContainer = document.createElement('div');
+                    eventsContainer.className = "space-y-1 p-2 bg-gray-900/30";
+
+                    events.forEach(event => eventsContainer.appendChild(createEventElement(event)));
+                    
+                    testContent.appendChild(eventsContainer);
+                    testCaseContent.appendChild(testElement);
+                });
+                container.appendChild(testCaseElement);
+            });
+            
+            addCollapsibleListeners();
+        }
+
+        /**
+         * Creates a single collapsible element (for test cases or tests).
+         */
+        function createCollapsibleElement(title, subtitle, status, level, reason = '') {
+            const div = document.createElement('div');
+            const isTestCase = level === 0;
+
+            const statusColors = {
+                PASS: 'bg-green-500/20 text-green-400 border-green-500/30',
+                FAIL: 'bg-red-500/20 text-red-400 border-red-500/30',
+                NOT_RAN: 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+            };
+            const statusColor = statusColors[status] || statusColors.NOT_RAN;
+
+            div.className = `rounded-lg overflow-hidden border ${isTestCase ? 'bg-gray-800 border-gray-700' : 'bg-gray-800/50 border-gray-700/50'}`;
+            div.style.marginLeft = isTestCase ? '0' : '20px';
+
+            let reasonHtml = '';
+            if (reason) {
+                reasonHtml = `<p class="mt-1 text-xs text-red-400/80 whitespace-normal break-words"><strong>Reason:</strong> ${escapeHtml(reason)}</p>`;
+            }
+
+            div.innerHTML = `
+                <div class="collapsible-header flex items-center justify-between p-3 cursor-pointer hover:bg-gray-700/50 ${statusColor}">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <svg class="arrow w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <div class="flex-grow overflow-hidden">
+                            <h3 class="font-semibold text-md truncate ${status === 'FAIL' ? 'text-red-300' : 'text-gray-100'}" title="${title}">${title}</h3>
+                            <p class="text-xs text-gray-400">${subtitle}</p>
+                            ${reasonHtml}
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold px-2 py-1 rounded-md ${statusColors[status].replace('border-', 'bg-').replace('/20', '/30')}">${status}</span>
+                </div>
+                <div class="collapsible-content border-t border-gray-700/50"></div>
+            `;
+            return div;
+        }
+
+        /**
+         * Creates a single, collapsible timeline event element, with special handling for exceptions.
+         */
+        function createEventElement(event) {
+            const div = document.createElement('div');
+            const indent = event.depth_of_detail * 16;
+            div.style.marginLeft = `${indent}px`;
+
+            if (event.isException) {
+                div.className = `border-l-4 border-red-500/70 bg-red-900/20 rounded-md p-3 my-1`;
+                const ex = event.variables_dict;
+                div.innerHTML = `
+                    <div class="flex items-center gap-2">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                        <div class="mono text-sm text-red-300">
+                            <p><strong>${escapeHtml(ex.type)}:</strong> ${escapeHtml(ex.exception)}</p>
+                            <p class="text-red-400/80">at line ${escapeHtml(ex.line)}</p>
+                        </div>
+                    </div>
+                    <p class="text-right text-xs text-gray-600 mt-1 mono">${event.original_key.split('.').slice(2).join('.')}</p>
+                `;
+                return div;
+            }
+            
+            const isInfra = event.original_key.includes('test_toolbox');
+            const eventType = isInfra ? 'Infrastructure' : 'Under Test';
+            const eventColor = isInfra ? 'border-sky-700/50' : 'border-gray-700/50';
+    
+            div.className = `border-l-2 ${eventColor} bg-gray-800/20 rounded-md overflow-hidden`;
+            
+            const hasVariables = event.variables_dict && Object.keys(event.variables_dict).length > 0;
+            let variablesHtml = '';
+            if (hasVariables) {
+                 variablesHtml = `<div class="collapsible-content p-3 bg-black/20">
+                    <div class="mono text-xs text-gray-400 space-y-1">
+                        ${Object.entries(event.variables_dict).map(([key, value]) => `
+                            <div class="grid grid-cols-[auto,1fr] gap-x-2 items-start">
+                                <span class="text-purple-400 font-medium text-right">${escapeHtml(key)}:</span>
+                                <span class="text-gray-300 break-all">${escapeHtml(String(value))}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+            }
+
+            const arrowVisibility = hasVariables ? '' : 'invisible';
+
+            div.innerHTML = `
+                <div class="collapsible-header flex items-start justify-between p-2 cursor-pointer hover:bg-gray-700/40">
+                    <div class="flex items-start gap-2 overflow-hidden">
+                         <svg class="arrow w-3 h-3 text-gray-400 mt-1 flex-shrink-0 ${arrowVisibility}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+                        <div class="flex-grow overflow-hidden">
+                             <p class="text-sm text-gray-300">${escapeHtml(event.entry_context)}</p>
+                             <p class="mono text-sm text-cyan-300 bg-gray-900/70 p-2 rounded-md my-1.5">${escapeHtml(event.code_str)}</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-semibold ml-2 px-2 py-1 rounded-md ${isInfra ? 'bg-sky-500/20 text-sky-300' : 'bg-gray-500/20 text-gray-300'} whitespace-nowrap">${eventType}</span>
+                </div>
+                ${variablesHtml}
+                <p class="text-right text-xs text-gray-600 px-2 pb-1 mono">${event.original_key.split('.').slice(2).join('.')}</p>
+            `;
+            return div;
+        }
+        
+        /**
+         * Adds click listeners to all collapsible headers.
+         */
+        function addCollapsibleListeners() {
+            document.querySelectorAll('.collapsible-header').forEach(header => {
+                header.addEventListener('click', (e) => {
+                    if (e.target.closest('.mono')) return;
+
+                    header.classList.toggle('open');
+                    const content = header.nextElementSibling;
+                    if(content && content.classList.contains('collapsible-content')) {
+                        content.style.display = content.style.display === "block" ? "none" : "block";
+                    }
+                });
+            });
+        }
+
+        /**
+         * Simple HTML escaping function.
+         */
+        function escapeHtml(unsafe) {
+            if (unsafe === null || unsafe === undefined) return '';
+            return unsafe
+                 .toString()
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+    </script>
+
+</body>
+</html>
+
+

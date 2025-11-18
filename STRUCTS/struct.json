@@ -1,0 +1,36 @@
+{
+	"meta": {
+		"captured_ideal": "Struct files define the possibility space boundaries this repository's content may exist within.",
+		"struct_description": "This document defines the structure for all '*_struct.json' files within the repository. By outlining standards, rules, and prompts each '*.struct.json' is intended to accurately capture the platonic ideal for a specific file category (e.g., AUDITORS, DRAFTERS, TOOLBOXES, TEMPLATES, STRUCTS). This struct file (struct.json) attempts to outline the platonic ideal that is 'struct' files within the context of this particular repository.",
+		"file_category": "struct",
+		"category_description": "Struct files attempt to capture the platonic ideal of one of this repository's file types via rules, prompts, and descriptions."
+	},
+	"audit_rules": {
+		"base_audit": {
+			"file_format": "Struct files must be a parsable .json file.",
+			"json_keys": "Struct files must contain a .json structure that at a minimum of two levels deep has the exact dictionary keys as this file.",
+			"json_keys_values": "Struct files must contain a .json structure that at a minimum of two key levels deep has the exact value types as this file.",
+			"file_category_value": "Struct files [meta][file_category] value must be the name of the file type it captures.",
+			"rule_type": "Struct files must define each rule inside [audit_rules][base_audit] and [audit_rules][context_audit] as string type key value pairs.",
+			"prompt_type": "Struct files must define each prompt inside [prompts][audit_prompts] and [prompts][draft_prompts] as string type key value pairs.",
+			"prompt_keys": "Struct files must define each prompt inside [prompts][audit_prompts] and [prompts][draft_prompts] as string type key value pairs.",
+			"prompt_content": "For each prompt defined in [prompts][*_prompts] the key must be the file name of the file that contains the prompt content.",
+			"prompt_location": "For each prompt defined in [prompts][*_prompts] the file that the key is named after must be placed inside STRUCTS/prompts/*_struct.json/ folder.",
+			"prompt_context_files": "For each prompt defined in [prompts][*_prompts][prompt_file_name] there must be a [context_files] list which contains file paths of the files that the prompt will use.",
+			"prompt_file_type": "Each prompt file in the STRUCTS/prompts/*_struct.json/ folder must be a .md file."
+		},
+		"context_audit": {
+			"captured_ideal_value": "Struct files [meta][captured_ideal] value must have a single sentence describing the platonic ideal that struct file attempts to capture within its rules, prompts, and descriptions.",
+			"struct_description_value": "Struct files [meta][description] value must be a detailed description of the file type it defines and the platonic ideal it is attempting to capture.",
+			"category_description_value": "Struct files [meta][category_description] value must be a brief description of what the category of file is and what it is used for.",
+			"rule_keys": "Struct files must name their audit rule keys as human readable words in a snake case format.",
+			"rule_value": "Struct files must have each audit rule value as a clear human readable sentence.",
+			"rule_granularity": "Each rule in a struct file must address only a single requirement for that file type."
+		}
+	},
+	"prompts": {
+		"audit_prompts" : {},
+		"draft_prompts" : {},
+		"other_prompts" : {}
+	}
+}

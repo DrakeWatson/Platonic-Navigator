@@ -1,0 +1,23 @@
+{
+	"meta": {
+		"captured_ideal": "Drafters iterate on or create content within the repository based on information provided to it and repository constraints.",
+		"struct_description": "This document defines the structure for all '*_drafter.py' files within the repository.",
+		"file_category": "drafter",
+		"category_description": "Drafters use templates, prompts, and reviews to iterate on already created files or to create new files within the repository."
+	},
+	"audit_rules": {
+		"base_audit": {
+			"drafter_file_type": "All drafters must be a python file.",
+			"drafter_prompts": "All prompts an drafter script uses must be only those found within a struct file."
+		},
+		"context_audit": {
+			"drafter_format": "All drafters must conform to the 'drafter_template.py' file.",
+			"drafter_prompts": "All prompts an drafter script uses must be only those found within a struct file."
+		}
+	},
+	"prompts": {
+		"audit_prompts" : {}
+		"draft_prompts" : {}
+		"other_prompts" : {}
+	}
+}

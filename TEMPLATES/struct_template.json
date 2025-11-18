@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "captured_ideal": "",
+        "struct_description": "",
+        "file_category": "",
+        "category_description": ""
+    },
+    "audit_rules": {
+        "base_audit": {},
+        "context_audit": {}
+    },
+    "prompts": {
+        "audit_prompts": {},
+        "draft_prompts": {},
+        "other_prompts": {}
+    }
+}

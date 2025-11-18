@@ -1,0 +1,30 @@
+{
+	"meta": {
+		"captured_ideal": "Template files define the bare minimum of a file type within the repository.",
+		"struct_description": "This struct file defines the rules, prompts, and descriptions all '*_template.json' files within the repository must conform to. Each template is expected to contain the minimum content and structure any file of that template type will be constructed ontop of.",
+		"file_category": "template",
+		"category_description": "Templates contain the minimum content and structure files of that template type will be constructed of."
+	},
+	"audit_rules": {
+		"base_audit": {
+			"template_type_scripts": "Templates for file types that are python files must also be a python file.",
+			"template_type_other": "Templates for file types that are not scripts must be a .json file."
+		},
+		"context_audit": {}
+	},
+	"prompts": {
+		"audit_prompts" : {
+			"prompt_file_name": {
+				"context_files": ["file_path"]
+			}
+		},
+		"draft_prompts" : {
+			"prompt_file_name": {
+				"context_files": ["file_path"]
+		}},
+		"other_prompts" : {
+			"prompt_file_name": {
+				"context_files": ["file_path"]
+		}}
+	}
+}

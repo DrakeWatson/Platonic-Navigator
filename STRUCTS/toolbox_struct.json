@@ -1,0 +1,25 @@
+{
+	"meta": {
+		"captured_ideal": "Toolbox scripts define a single class which holds all functions and data structures required by the repository for that toolbox category.",
+		"struct_description": "This document defines the structure for all '*_toolbox.py' files within the repository. Each toolbox is constrained by the rules and descriptions within this struct file, while they are iterated and created based on the prompts defined in this file.",
+		"file_category": "toolbox",
+		"category_description": "Toolbox scripts contain a single class which holds functionality for that specific category of script."
+	},
+	"audit_rules": {
+		"base_audit": {
+			"toolbox_file_type": "Toolbox scripts must be a python file.",
+			"toolbox_functions": "Toolbox scripts must not have any functions defined outside their toolbox class except for those found in 'toolbox_template.py'.", 
+			"toolbox_class": "Toolbox scripts must contain a class with the naming format 'TypeToolbox'."
+		},
+		"context_audit": {
+			"file_header_format": "Toolbox scripts must match the file header format indicated within 'toolbox_template.py'.",
+			"function_header_format": "Toolbox scripts must match the function header format indicated within 'toolbox_template.py'.",
+			"toolbox_content": "Toolbox scripts must contain only functions relevant to its type."
+		}
+	},
+	"prompts": {
+		"audit_prompts" : {}
+		"draft_prompts" : {}
+		"other_prompts" : {}
+	}
+}

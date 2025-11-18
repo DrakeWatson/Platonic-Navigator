@@ -1,0 +1,23 @@
+{
+	"meta": {
+		"captured_ideal": "Auditors indicate if any content is misaligned from the repository's platonic ideal.",
+		"struct_description": "This document defines the structure for all '*_auditor.py' files within the repository.",
+		"file_category": "auditor",
+		"category_description": "Auditors iterate over a struct file's rules and then report whether any corresponding files do not follow those rules."
+	},
+	"audit_rules": {
+		"base_audit": {
+			"auditor_file_type": "All auditors must be a python file.",
+			"auditor_prompts": "All prompts an auditor script uses must be only those found within a struct file."
+		},
+		"context_audit": {
+			"auditor_format": "All auditors must conform to the 'auditor_template.py' file.",
+			"auditor_prompts": "All prompts an auditor script uses must be only those found within a struct file."
+		}
+	},
+	"prompts": {
+		"audit_prompts" : {}
+		"draft_prompts" : {}
+		"other_prompts" : {}
+	}
+}

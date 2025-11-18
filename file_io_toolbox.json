@@ -1,0 +1,528 @@
+{
+    "metadata": {
+        "name": "file_io_toolbox",
+        "description": "A toolbox for file I/O operations.",
+        "version": "1.0.0"
+    },
+
+  "functions": [
+      {
+        "name": "file_io_toolbox.FileIoToolbox.__init__",
+        "description": "Initializes the FileIoToolbox. Currently, no specific initialization parameters are required.",
+        "parameters": [],
+        "returns": {}
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.read_file",
+        "description": "Reads the entire content of a file.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          }
+        ],
+        "returns": {
+          "type": "str | None",
+          "description": "The content of the file as a string, or None if an error occurs."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.write_file",
+        "description": "Writes content to a file. Can overwrite or append.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          },
+          {
+            "name": "content",
+            "type": "str",
+            "description": "The content to write."
+          },
+          {
+            "name": "overwrite",
+            "type": "bool",
+            "description": "If True, overwrites the file. If False, appends to the file.",
+            "default_value": "True"
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if writing was successful, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.create_empty_file",
+        "description": "Creates a new empty file. If the file already exists, it will be truncated.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file to create."
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if creation was successful, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.append_to_file",
+        "description": "Appends content to an existing file. If the file does not exist, it creates it.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          },
+          {
+            "name": "content",
+            "type": "str",
+            "description": "The content to append."
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if appending was successful, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.are_files_equal",
+        "description": "Checks if the content of two files is equal.",
+        "parameters": [
+          {
+            "name": "file_path1",
+            "type": "str",
+            "description": "Path to the first file."
+          },
+          {
+            "name": "file_path2",
+            "type": "str",
+            "description": "Path to the second file."
+          },
+          {
+            "name": "shallow",
+            "type": "bool",
+            "description": "If True (default), performs a shallow comparison (metadata, size). If False, performs a byte-by-byte content comparison.",
+            "default_value": "True"
+          }
+        ],
+        "returns": {
+          "type": "bool | None",
+          "description": "True if files are equal, False if not, None if one or both files don't exist."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.find_string_in_file",
+        "description": "Checks if a specific string exists within a file.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          },
+          {
+            "name": "search_string",
+            "type": "str",
+            "description": "The string to search for."
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if the string is found, False otherwise or if an error occurs."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.extract_python_components",
+        "description": "Extracts top-level functions and class names from a Python file.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the Python file."
+          }
+        ],
+        "returns": {
+          "type": "dict | None",
+          "description": "A dictionary with 'functions' and 'classes' lists, or None if parsing fails or file not found."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.is_valid_json",
+        "description": "Checks if a file contains valid JSON.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if the file is valid JSON, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.is_valid_csv",
+        "description": "Attempts to validate if a file is a well-formed CSV. This is a basic check; complex CSVs might require more sophisticated validation.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          },
+          {
+            "name": "delimiter",
+            "type": "str",
+            "description": "The delimiter used in the CSV.",
+            "default_value": "','"
+          },
+          {
+            "name": "quotechar",
+            "type": "str",
+            "description": "The quote character used.",
+            "default_value": "'\"'"
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if the file seems to be a valid CSV, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.parse_json_file",
+        "description": "Parses a JSON file into a Python dictionary or list.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the JSON file."
+          }
+        ],
+        "returns": {
+          "type": "dict | list | None",
+          "description": "The parsed JSON data, or None if an error occurs."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.write_json",
+        "description": "Writes a Python dictionary or list to a file as JSON.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file to write."
+          },
+          {
+            "name": "data",
+            "type": "dict | list",
+            "description": "The data to serialize as JSON."
+          },
+          {
+            "name": "overwrite",
+            "type": "bool",
+            "description": "If True, overwrites the file. If False, appends (not typical for JSON files).",
+            "default_value": "True"
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if writing was successful, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.parse_csv_file",
+        "description": "Parses a CSV file into a list of lists or list of dictionaries.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the CSV file."
+          },
+          {
+            "name": "delimiter",
+            "type": "str",
+            "description": "The delimiter used in the CSV file.",
+            "default_value": "','"
+          },
+          {
+            "name": "as_dict",
+            "type": "bool",
+            "description": "If True, parses CSV into a list of dictionaries using the first row as keys. If False (default), parses into a list of lists.",
+            "default_value": "False"
+          }
+        ],
+        "returns": {
+          "type": "list | None",
+          "description": "A list of lists (or list of dicts) representing the CSV data, or None if an error occurs."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.modify_line_in_file",
+        "description": "Modifies a specific line in a text file. Line numbers are 1-indexed.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          },
+          {
+            "name": "line_number",
+            "type": "int",
+            "description": "The 1-indexed line number to modify."
+          },
+          {
+            "name": "new_content",
+            "type": "str",
+            "description": "The new content for the line (without newline character)."
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if modification was successful, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.delete_file_contents",
+        "description": "Deletes all content from a file (truncates it).",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if successful, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.delete_file",
+        "description": "Deletes a file.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file to delete."
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if deletion was successful, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.get_file_size",
+        "description": "Gets the size of a file.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          },
+          {
+            "name": "human_readable",
+            "type": "bool",
+            "description": "If True, returns size in a human-readable format (KB, MB, GB).",
+            "default_value": "False"
+          }
+        ],
+        "returns": {
+          "type": "int | str | None",
+          "description": "Size in bytes (int), or human-readable string, or None if file not found."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.file_exists",
+        "description": "Checks if a file exists and is actually a file.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": ""
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": ""
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.dir_exists",
+        "description": "Checks if a directory exists and is actually a directory.",
+        "parameters": [
+          {
+            "name": "dir_path",
+            "type": "str",
+            "description": ""
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": ""
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.create_directory",
+        "description": "Creates a directory.",
+        "parameters": [
+          {
+            "name": "dir_path",
+            "type": "str",
+            "description": "The path for the directory to be created."
+          },
+          {
+            "name": "exist_ok",
+            "type": "bool",
+            "description": "If True, does not raise an error if the directory already exists.",
+            "default_value": "True"
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if directory was created or already existed (with exist_ok=True), False on error."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.list_directory_contents",
+        "description": "Lists contents (files and directories) of a given directory. Optionally filters by a simple wildcard pattern (e.g., \"*.txt\").",
+        "parameters": [
+          {
+            "name": "dir_path",
+            "type": "str",
+            "description": "The path to the directory."
+          },
+          {
+            "name": "pattern",
+            "type": "str | None",
+            "description": "Optional wildcard pattern to filter results.",
+            "default_value": "None"
+          }
+        ],
+        "returns": {
+          "type": "list | None",
+          "description": "A list of names of files and directories, or None if directory doesn't exist."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.copy_file",
+        "description": "Copies a file from source to destination. Destination can be a directory (file will be copied into it with same name) or a full file path (file will be copied and possibly renamed).",
+        "parameters": [
+          {
+            "name": "src_path",
+            "type": "str",
+            "description": "Path to the source file."
+          },
+          {
+            "name": "dest_path",
+            "type": "str",
+            "description": "Path to the destination file or directory."
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if copy was successful, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.move_file",
+        "description": "Moves (renames) a file from source to destination.",
+        "parameters": [
+          {
+            "name": "src_path",
+            "type": "str",
+            "description": "Path to the source file."
+          },
+          {
+            "name": "dest_path",
+            "type": "str",
+            "description": "Path to the destination file or directory."
+          }
+        ],
+        "returns": {
+          "type": "bool",
+          "description": "True if move was successful, False otherwise."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.prepare_ast_script_function",
+        "description": "Prepares a specific top-level function from a Python file for later execution. This function loads the module and retrieves the function object. It does NOT execute the function itself. Module-level code in the file WILL execute.",
+        "parameters": [
+          {
+            "name": "function_node",
+            "type": "ast.FunctionDef",
+            "description": "The ast.FunctionDef node of the function to prepare."
+          },
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the Python file containing the function."
+          }
+        ],
+        "returns": {
+          "type": "Callable",
+          "description": "A callable function object ready to be executed."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.prepare_ast_class_method",
+        "description": "Prepares a specific method of a class from a Python file for later execution. This function loads the module, instantiates the class (executing its __init__), and retrieves the bound method. It does NOT execute the method itself.",
+        "parameters": [
+          {
+            "name": "class_node",
+            "type": "ast.ClassDef",
+            "description": "The ast.ClassDef node of the class containing the method."
+          },
+          {
+            "name": "method_node",
+            "type": "ast.FunctionDef",
+            "description": "The ast.FunctionDef node of the method to prepare."
+          },
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the Python file containing the class and method."
+          },
+          {
+            "name": "instance_args",
+            "type": "Tuple",
+            "description": "A tuple of positional arguments for the class constructor (__init__).",
+            "default_value": "()"
+          },
+          {
+            "name": "instance_kwargs",
+            "type": "Dict[str, Any]",
+            "description": "A dictionary of keyword arguments for the class constructor.",
+            "default_value": "None"
+          }
+        ],
+        "returns": {
+          "type": "Callable",
+          "description": "A tuple containing: - A callable bound method ready to be executed. - An instance of the class."
+        }
+      },
+      {
+        "name": "file_io_toolbox.FileIoToolbox.prepare_ast_class_method_for_instance",
+        "description": "Prepares a specific method of a class instance for later execution. This function retrieves the bound method from the instance.",
+        "parameters": [
+          {
+            "name": "class_instance",
+            "type": "Any",
+            "description": ""
+          },
+          {
+            "name": "method_name",
+            "type": "str",
+            "description": ""
+          }
+        ],
+        "returns": {
+          "type": "Callable",
+          "description": ""
+        }
+      }
+    ]
+  }

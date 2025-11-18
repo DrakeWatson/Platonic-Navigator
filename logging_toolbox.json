@@ -1,0 +1,190 @@
+{
+    "metadata": {
+        "name": "logging_toolbox",
+        "description": "A toolbox for logging operations.",
+        "version": "1.0.0"
+    },
+    "functions": [
+        {
+      "name": "logging_toolbox.LoggingToolbox.__init__",
+      "description": "Initializes the LoggingToolbox.\n\nThe logger name and the base for the log file name will be automatically \nderived from the __name__ of the script/module that instantiates this class.\n\nLog files will be automatically placed in a 'logs' subdirectory relative \nto the script that instantiates this class.\nThe log filename will be formatted as: \n<module_name>_<YYYY-MM-DD_HH-MM-SS>.log",
+      "parameters": [],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "logging_toolbox.LoggingToolbox.debug",
+      "description": "",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "str",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "logging_toolbox.LoggingToolbox.info",
+      "description": "",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "str",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "logging_toolbox.LoggingToolbox.warning",
+      "description": "",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "str",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "logging_toolbox.LoggingToolbox.error",
+      "description": "",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "str",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "logging_toolbox.LoggingToolbox.critical",
+      "description": "",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "str",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "logging_toolbox.LoggingToolbox.exception",
+      "description": "",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "str",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "logging_toolbox.LoggingToolbox.line_break",
+      "description": "Logs a universal seperator that can have its width adjusted as needed.",
+      "parameters": [
+        {
+          "name": "message_level",
+          "type": "str",
+          "description": "debug, info, warning, error, critical, exception",
+          "default_value": "info"
+        },
+        {
+          "name": "width",
+          "type": "int",
+          "description": "Defaults to 30 character width, can be adjusted as needed.",
+          "default_value": "_DEFAULT_CONSOLE_WIDTH"
+        },
+        {
+          "name": "char",
+          "type": "str",
+          "description": "",
+          "default_value": "="
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "logging_toolbox.LoggingToolbox.line_wrap",
+      "description": "Logs a wrapped output of a log message.",
+      "parameters": [
+        {
+          "name": "message_string",
+          "type": "str",
+          "description": "The message to be wrapped."
+        },
+        {
+          "name": "message_level",
+          "type": "str",
+          "description": "debug, info, warning, error, critical, exception",
+          "default_value": "info"
+        },
+        {
+          "name": "max_width",
+          "type": "int",
+          "description": "Defaults to 30 character width, can be adjusted as needed.",
+          "default_value": "_DEFAULT_CONSOLE_WIDTH"
+        },
+        {
+          "name": "offset_left",
+          "type": "int",
+          "description": "Defaults to 0, can be adjusted as needed.",
+          "default_value": "0"
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "logging_toolbox.LoggingToolbox._print_level",
+      "description": "Prints a message at the given level.",
+      "parameters": [
+        {
+          "name": "message_string",
+          "type": "str",
+          "description": "The message to be printed."
+        },
+        {
+          "name": "message_level",
+          "type": "str",
+          "description": "debug, info, warning, error, critical, exception",
+          "default_value": "info"
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    }
+  ]
+}

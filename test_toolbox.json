@@ -1,0 +1,249 @@
+{
+    "metadata": {
+        "name": "test_toolbox",
+        "description": "A toolbox for testing operations.",
+        "version": "1.0.0"
+    },
+    "functions": [
+        {
+      "name": "test_toolbox.TestToolbox.__init__",
+      "description": "Initializes the TestToolbox for a particular test plan.",
+      "parameters": [
+        {
+          "name": "test_plan_path",
+          "type": "str",
+          "description": "A valid path to a script's test plan .json file."
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox.prepare_for_self_test",
+      "description": "Prepares the TestToolbox for self-testing by setting up the test environment.",
+      "parameters": [
+        {
+          "name": "test_case_dict",
+          "type": "Dict[str, Any]",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox.execute_test_plan",
+      "description": "Executes all test cases defined in the test plan.\nRequires the following class variables have valid values:\n    self.test_folder_path\n    self.test_plan",
+      "parameters": [
+        {
+          "name": "test_case_name",
+          "type": "str",
+          "description": "The name of the test case to execute. If None, all test cases will be executed.",
+          "default_value": "None"
+        }
+      ],
+      "returns": {
+        "type": "dict",
+        "description": "A dictionary containing details about the results of the test plan execution"
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._log_final_report",
+      "description": "Formats the final_report dictionary for human readability and logs it\nline by line.",
+      "parameters": [
+        {
+          "name": "final_report",
+          "type": "dict",
+          "description": "The report dictionary to format and log."
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._execute_test_case",
+      "description": "Given a test case name, runs all tests within that test case and returns the results.\nAssumes self.tc_name, self.tc_type, self.tc_subtype, and self.test_case_dict[self.tc_name] are set.",
+      "parameters": [],
+      "returns": {
+        "type": "dict",
+        "description": "A dictionary conforming to _TC_RESULT_DICT with results of the test case execution."
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._execute_single_test_definition",
+      "description": "Executes all steps for a single test definition (e.g., one item from the \"tests\" list in a test case JSON).",
+      "parameters": [
+        {
+          "name": "test_def",
+          "type": "Dict[str, Any]",
+          "description": "The dictionary for a single test definition."
+        }
+      ],
+      "returns": {
+        "type": "Dict[str, Any]",
+        "description": "A dictionary conforming to _T_RESULT_DICT."
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._prepare_test_environment",
+      "description": "Loads files and prepares functions needed for the test.",
+      "parameters": [
+        {
+          "name": "test_def",
+          "type": "Dict[str, Any]",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "bool",
+        "description": ""
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._run_unit_test_steps",
+      "description": "Executes steps for a unit test and updates result_dict.",
+      "parameters": [
+        {
+          "name": "test_def",
+          "type": "Dict[str, Any]",
+          "description": ""
+        },
+        {
+          "name": "result_dict",
+          "type": "Dict[str, Any]",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._run_integration_test_steps",
+      "description": "Executes steps for an integration test and updates result_dict.",
+      "parameters": [
+        {
+          "name": "test_def",
+          "type": "Dict[str, Any]",
+          "description": ""
+        },
+        {
+          "name": "result_dict",
+          "type": "Dict[str, Any]",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._run_full_test_steps",
+      "description": "Executes steps for a full test. Similar to integration but may have more complex validation.",
+      "parameters": [
+        {
+          "name": "test_def",
+          "type": "Dict[str, Any]",
+          "description": ""
+        },
+        {
+          "name": "result_dict",
+          "type": "Dict[str, Any]",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "type": "Any",
+        "description": ""
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._resolve_parameters",
+      "description": "Resolves parameter values based on their definitions (hardcoded, from return_store, or from loaded files).",
+      "parameters": [
+        {
+          "name": "params_config",
+          "type": "Dict[str, str]",
+          "description": "The \"params\" dictionary from a test step."
+        }
+      ],
+      "returns": {
+        "type": "Dict[str, Any]",
+        "description": "A dictionary of resolved parameter names and their actual values."
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._resolve_single_param_value",
+      "description": "Resolves a single parameter's value.\nSources can be:\n- \"hardcoded_value\" (literal string, taken as is unless it's a special type)\n- Special hardcoded: \"true\", \"false\", \"null\"/\"none\", integers, floats\n- \"return_X\" (from self.return_value_store)\n- \"file_key.path.to.value\" (from self.loaded_test_files, e.g., \"json_0.some_dict.value\")\n- \"path/to/some_file_listed_in_files_key\" (resolves to the absolute path of the file)",
+      "parameters": [
+        {
+          "name": "param_value_source",
+          "type": "Any",
+          "description": "The string defining how to get the parameter's value."
+        }
+      ],
+      "returns": {
+        "type": "Tuple[Any, str | None]",
+        "description": "The resolved value and an error message if resolution failed, else None."
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._validate_file_contents",
+      "description": "Validates file contents based on a list of check strings.\nEach check string is \"file_key_or_path:OPERATOR:operand\"\ne.g., \"json_1:IS:json_2\" -> content of file for json_1 is identical to content of file for json_2\n      \"output.txt:HAS:Some string\"\n      \"output.txt:EXCLUDES:Error string\"",
+      "parameters": [
+        {
+          "name": "checks",
+          "type": "List[str]",
+          "description": "List of validation strings."
+        }
+      ],
+      "returns": {
+        "type": "Tuple[bool, List[str]]",
+        "description": "Overall validation status and list of failure reasons."
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._load_test_files_content",
+      "description": "Loads content of specified files (JSON, CSV) into self.loaded_test_files.\nAlso populates self.test_files_path_list with their absolute paths.",
+      "parameters": [
+        {
+          "name": "files_map",
+          "type": "Dict[str, str]",
+          "description": "A dictionary like {\"json_0\": \"file.json\", \"csv_0\": \"data.csv\"}\n                                     from the test definition's \"files\" key."
+        }
+      ],
+      "returns": {
+        "type": "bool",
+        "description": "True if all essential files were loaded successfully, False otherwise."
+      }
+    },
+    {
+      "name": "test_toolbox.TestToolbox._prepare_functions_for_test",
+      "description": "Prepares callable functions/methods based on identifiers (e.g., \"script_file.func\" or \"toolbox.Class.method\").\nStores them in self.prepared_functions.",
+      "parameters": [
+        {
+          "name": "func_identifiers",
+          "type": "List[str]",
+          "description": "List of function identifiers."
+        },
+        {
+          "name": "class_instance_args_list",
+          "type": "List[Dict[str, Any]]",
+          "description": "List of {\"class\": \"toolbox.Class\", \"instance_args\":{...}}"
+        }
+      ],
+      "returns": {
+        "type": "bool",
+        "description": "True if all functions were prepared successfully."
+      }
+    }
+  ]
+}

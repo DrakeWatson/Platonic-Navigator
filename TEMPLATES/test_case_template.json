@@ -1,0 +1,41 @@
+{
+
+	"metadata": {
+		"name": "example_tests",
+		"test_case_type": "unit | integration | full",
+		"description": "Detailed description of the purpose and scope of this specific test case. This test case focuses on [specific aspect].",
+		"last_updated": "YYYY-MM-DD"
+	},
+	"tests" : [
+		{"test_name": "example_unit_test_0",
+		"files": {
+			"json_0": "example_test_inputs.json", 
+			"csv_0": "example_test_data.csv",
+			"json_1": "expected_test_result_file.json",
+			"json_2": "test_result.json"},
+		"functions": ["script_file.function_in_script | toolbox_file.class_name.function_in_class"],
+		"class_instance_args": [{"class": "toolbox_file.class_name", "instance_args":{"init_arg0":"val", "init_arg1":"val"}}],
+		"expected_exceptions": ["example_exception_0"],
+		"expected_return_value_and_order": {
+			"return_variable_0":{
+				"var_type":"hardcoded_var_value"},
+			"return_variable_1":{
+				"var_type":"json_1.example_dictionary_0.expected_result.return_variable_0"}
+			},
+		"expected_file_content": ["json_1:IS:json_2", "json_1:HAS:Some string json_1 must have inside it", "json_1:EXCLUDES:Some string json_1 must not have inside it"],
+		"test_steps_order":[
+			{"function":"script_file.first_function_to_be_called",
+			"params": {
+				"example_arg_0":"hardcoded_value", 
+				"example_arg_1":"json_0.example_dictionary_0", 
+				"path_to_data":"path/to/csv_0",
+				"result_path": "path/to/json_2"},
+			"return_pointers": ["return_0", "return_1"]},
+			{"function":"script_file.some_function_after_first",
+			"params":
+				{"var_0":"hardcoded value", "var_1": "return_0", "var_2": "json_0.example_dict.val"},
+			"return_pointers": ["return_2", "return_3"]}]
+		}
+	]
+
+}

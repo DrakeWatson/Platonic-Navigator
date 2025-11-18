@@ -1,0 +1,97 @@
+{
+	"meta": {
+		"captured_ideal": "Test files define a detailed and runnable set of test cases needed to ensure easy verification that a script works.",
+		"struct_description": "This document defines the rules, prompts, and descriptions of for '*_test.json' files. Each test file is expected to meet the required testing format and coverage standards required by the repository.",
+		"file_category": "test",
+		"category_description": "Test .json files are used to create detailed and executable test cases for each script within the repository."
+	},
+	"audit_rules": {
+		"base_audit": {
+			"test_folder": "Each script should have its own dedicated folder inside its respective FILETYPE directory whose name is its own.",
+			"file_format": "All test files must be a parsable .json file.",
+			"test_plan": "Each script's test folder must contain a single 'test_plan.json' file.",
+			"test_plan_keys": "The 'test_plan.json' file must use the same dictionary keys as the [test_plan] dictionary inside of test_plan_template.json",
+			"test_plan_values": "The 'test_plan.json' file must use the same value types for each key as the [test_plan] dictionary inside of test_plan_template.json",
+			"test_keys": "All test case files must use the same dictionary keys as the [test_case] dictionary inside of test_case_template.json.",
+			"test_values": "All test case files must use the same value types for each key as the [test_case] dictionary inside of test_case_template.json",
+			"code_coverage_minimum": "All 'test_plan.json' files must have an integer value in their [code_coverage] key greater than 85.",
+			"passing_percentage": "All 'test_plan.json' files must have an integer value in their [passing_percentage] key greater than 99.",
+			"ran_last": "All 'test_plan.json' files must have a datecode string in [ran_last] that correctly marks the last time the full test plan was ran.",
+			"functional_coverage": "All 'test_plan.json' files must have at minimum one [functional] value filled out.",
+			"exception_coverage": "All 'test_plan.json' files must have at minimum one [exception] value filled out.",
+			"mock_files_test_plan": "All files listed in the [files] list of any test case .json file must be present in the tests directory.",
+			"mock_files_folder": "All files other than 'test_plan.json' and '*_test.json' in the test directory must be listed in [test_files] of 'test_plan.json'.",
+			"literal_string_flag": "All dot-separated paths that should not be parsed as actual dot-separated paths must start with '!STR_LITERAL!'.",
+			"python_test_files": "All python files in the test directory must end with '_test.py'.",
+			"test_case_files": "All test case names must end with '*_tests'.",
+			"integration_test_cases": "All integration tests must execute a minimum of two consecutive functions in their test_steps_order list.",
+			"full_test_cases": "All full test test_steps_order fields must be composed of consecutive functions that are at minimum two integration test's test_steps_order entries.",
+			"support_files": "Test support files must never be mock python scripts that execute code to help with running the test cases.",
+			"support_files_python": "All test support files that are python files must only ever be used as input data or output comparison for the test definitions."
+		},
+		"context_audit": {}
+	},
+	"prompts": {
+		"audit_prompts" : {},
+		"draft_prompts" : {
+			"new_test_plan_prompt": {
+				"context_files": [
+					"TEMPLATES/test_plan_template.json", 
+					"TOOLBOXES/test_toolbox.py", 
+					"STRUCTS/test_struct.json", 
+					"TOOLBOXES/tests/test_toolbox/test_plan.json",
+					"TOOLBOXES/tests/test_toolbox/prepare_functions_tests.json"]
+			},
+			"modify_test_plan_prompt": {
+				"context_files": [
+					"TEMPLATES/test_case_template.json", 
+					"TOOLBOXES/test_toolbox.py", 
+					"STRUCTS/test_struct.json", 
+					"TOOLBOXES/tests/test_toolbox/test_plan.json",
+					"TOOLBOXES/tests/test_toolbox/prepare_functions_tests.json"]
+			},
+			"modify_test_case_files_prompt": {
+				"context_files": [
+					"TOOLBOXES/test_toolbox.py", 
+					"STRUCTS/test_struct.json", 
+					"TEMPLATES/test_case_template.json", 
+					"TOOLBOXES/tests/test_toolbox/prepare_functions_tests.json"]
+			},
+			"generate_test_case_json_prompt": {
+				"context_files": [
+					"TOOLBOXES/test_toolbox.py", 
+					"STRUCTS/test_struct.json", 
+					"TEMPLATES/test_case_template.json", 
+					"TOOLBOXES/tests/test_toolbox/prepare_functions_tests.json"]
+			},
+			"generate_test_steps_guidelines_prompt": {
+				"context_files": []
+			},
+			"populate_test_plan_prompt": {
+				"context_files": []
+			},
+			"populate_test_logic_prompt": {
+				"context_files": []
+			},
+			"populate_test_description_prompt":{
+				"context_files": []
+			},
+			"populate_function_details_prompt": {
+				"context_files": []
+			},
+			"populate_test_plan_tests_prompt": {
+				"context_files": []
+			},
+			"populate_test_case_prompt": {
+				"context_files": []
+			},
+			"populate_test_case_details_prompt":{
+				"context_files": []
+			},
+			"populate_test_files_prompt": {
+				"context_files": []
+			}
+		},
+		"other_prompts" : {}
+	}
+}
